@@ -91,7 +91,7 @@ This project focuses on delivering a premium entertainment browsing experience i
 ## 🌐 Live Demo
 
 Frontend: [CinemaHub - Vercel](https://cinema-hub-weld.vercel.app) 
-Backend API: [CinemaHub - Render](https://cinemahub-4ade.onrender.com)
+Backend: [CinemaHub - Render](https://cinemahub-4ade.onrender.com)
 
 ---
 
