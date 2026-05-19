@@ -18,7 +18,7 @@ const MediaCard = ({ user, media, handleWatchlist }) => {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              handleWatchlist(String(media.id), mediaType);
+              handleWatchlist(media.id, mediaType);
             }}
             className="p-2 sm:p-3 bg-slate-700/80 hover:bg-slate-900 rounded-full transition cursor-pointer"
           >
