@@ -127,7 +127,6 @@ const ProfilePage = ({ user, setUser, verifyUser, handleChangeLanguage, handleSh
     }
   }
 
-  console.log(user)
   if (togglingAdult) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center px-4">
@@ -225,7 +224,7 @@ const ProfilePage = ({ user, setUser, verifyUser, handleChangeLanguage, handleSh
                     </span>
                   </div>
                   <h2 className="text-2xl font-bold">
-                    {user?.watchlist.length}
+                    {user?.watchlist?.length || 0}
                   </h2>
                 </div>
                 <div className="rounded-2xl bg-zinc-900/70 border border-white/5 p-4">
