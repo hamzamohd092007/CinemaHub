@@ -5,9 +5,9 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String, default: "/defaultAvatar.svg" },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
-    watchlist: {type: [{ id: String, type: String }], default: []},
-    language: {type: String, required: true},
-    showAdult: {type: Boolean, default: false},
+    watchlist: [{ id: Number, mediaType: String }],
+    language: { type: String, required: true },
+    showAdult: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
