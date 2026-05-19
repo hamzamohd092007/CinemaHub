@@ -7,6 +7,16 @@ import upload from '../middlewares/upload.js';
 
 const userRouter = express.Router();
 
+const formatUser = (user) => {
+    return {
+        ...user.toObject(),
+        watchlist: user.watchlist.map(item => ({
+            id: item.id,
+            type: item.mediaType
+        }))
+    }
+}
+
 userRouter.get('/me', auth, async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -17,7 +27,8 @@ userRouter.get('/me', auth, async (req, res) => {
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
-        res.status(200).json({ success: true, user });
+        const formattedUser = formatUser(user);
+        res.status(200).json({ success: true, user: formattedUser });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
@@ -44,7 +55,8 @@ userRouter.post('/signup', upload.single("avatar"), async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "1d" }
         );
-        res.status(201).json({ success: true, token, user });
+        const formattedUser = formatUser(user);
+        res.status(201).json({ success: true, token, user: formattedUser });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
@@ -69,7 +81,8 @@ userRouter.post('/signin', async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "1d" }
         );
-        res.status(200).json({ success: true, token, user });
+        const formattedUser = formatUser(user);
+        res.status(200).json({ success: true, token, user: formattedUser });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
@@ -104,7 +117,8 @@ userRouter.post('/update', auth, upload.single("avatar"), async (req, res) => {
             { $set: updateData },
             { returnDocument: "after", runValidators: true }
         )
-        res.status(200).json({ success: true, message: "User updated successfully", user: updatedUser });
+        const formattedUser = formatUser(updatedUser);
+        res.status(200).json({ success: true, message: "User updated successfully", user: formattedUser });
     } catch (error) {
         console.log(error)
         res.status(500).json({ success: false, message: "Internal server error" });
@@ -179,15 +193,18 @@ userRouter.put('/watchlist', auth, async (req, res) => {
         if (!user) {
             return res.status(400).json({ success: false, message: "Media not found" });
         }
+        if (!user.watchlist) {
+            user.watchlist = []
+        }
         const isWatchListed = user.watchlist.some((watchlist) => watchlist.id === id);
         if (isWatchListed) {
             user.watchlist = user.watchlist.filter((watchlist) => watchlist.id !== id);
         } else {
-            const newWatchlist = { id, type };
-            user.watchlist.push(newWatchlist);
+            user.watchlist.push({ id, mediaType: type });
         }
         await user.save();
-        res.status(200).json({ success: true, message: "User updated successfully", user });
+        const formattedUser = formatUser(user);
+        res.status(200).json({ success: true, message: "User updated successfully", user: formattedUser });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
@@ -209,7 +226,8 @@ userRouter.put('/change-language', auth, async (req, res) => {
         }
         user.language = language;
         await user.save();
-        res.status(200).json({ success: true, message: "User updated successfully", user });
+        const formattedUser = formatUser(user);
+        res.status(200).json({ success: true, message: "User updated successfully", user: formattedUser });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
@@ -227,7 +245,8 @@ userRouter.put('/show-adult', auth, async (req, res) => {
         }
         user.showAdult = !user.showAdult;
         await user.save();
-        res.status(200).json({ success: true, message: "User updated successfully", user });
+        const formattedUser = formatUser(user);
+        res.status(200).json({ success: true, message: "User updated successfully", user: formattedUser });
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
