@@ -99,7 +99,7 @@ This project focuses on delivering a premium entertainment browsing experience i
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/CinemaHub.git
+git clone https://github.com/hamzamohd092007/CinemaHub.git
 
 # Navigate to project folder
 cd CinemaHub
